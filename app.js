@@ -6,6 +6,7 @@ const arrayArticulos = [{
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 49.99,
         precioNuevo: 34.99,
+        cantidad: 1
     },
     {
         id: 02,
@@ -14,7 +15,8 @@ const arrayArticulos = [{
         imagen: "img/suplemento2.jpg",
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 15,
-        precioNuevo: 12.49
+        precioNuevo: 12.49,
+        cantidad: 1
     },
     {
         id: 03,
@@ -23,9 +25,13 @@ const arrayArticulos = [{
         imagen: "img/suplemento3.jpg",
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 30.99,
-        precioNuevo: 29.44
+        precioNuevo: 29.44,
+        cantidad: 1
     }
 ];
+let articulosCarrito = [];
+
+let tBody = document.querySelector("#lista-carrito tbody");
 
 /* --------------------------------------------------------------------------------------------------------------------------------------- */
 
@@ -105,30 +111,95 @@ function bucleForEach() {
         pPrecio.appendChild(span);
 
         let a = document.createElement('a');
+        /* --------------------------------------------------------------addEventListener----------------------------------------------------------*/
+
+        a.addEventListener("click", () => {
+            actualizacionCarrito(objeto);
+        });
+
+        /* --------------------------------------------------------------addEventListener----------------------------------------------------------*/
+
         a.setAttribute('href', '#');
         a.classList.add('u-full-width', 'button-primary', 'button', 'input', 'agregar-carrito');
         a.setAttribute('data-id', objeto.id);
         a.textContent = 'Agregar Al Carrito';
         infoCard.appendChild(a);
     })
-    /* --------------------------------------------------------------addEventListener----------------------------------------------------------*/
-    // Seleccionar todos los botones dentro del bucle
-    const botones = document.querySelectorAll(".agregar-carrito");
-    // Agregar un event listener a cada botón
-    botones.forEach(boton => {
-
-        boton.addEventListener('click', (e) => {
-            // Guardamos el Id del articulo clicado en articuloId
-            let articuloId = e.target.getAttribute("data-id");
-            console.log(articuloId);
-            // Ejecutamos metodo .find para que imprima el objeto que corresponda con la Id clicada anteriormente
-            let objetoClicado = arrayArticulos.find(function (elemento) {
-                return elemento.id == articuloId;
-            });
-            console.log(objetoClicado);
-        });
-    });
-    /* --------------------------------------------------------------addEventListener----------------------------------------------------------*/
 };
 
-// 1 Hacer una funcion que haga un bucle y recorra todos los objetos del array y los pinte en el Htmls
+
+function actualizacionCarrito(objeto) {
+    // Quitamos del Html el array obsoleto que se pinto anteriormente
+    limpiarDuplicados();
+    articulosCarrito.push(objeto);
+
+    for (i = 0; i < articulosCarrito.length; i++) {
+
+        let rowTbody = document.createElement('tr');
+        let tdImagen = document.createElement('td');
+        let imgArticulo = document.createElement('img');
+        imgArticulo.setAttribute('src', articulosCarrito[i].imagen);
+        imgArticulo.setAttribute('width', "100");
+        let tdTitulo = document.createElement('td');
+        tdTitulo.textContent = articulosCarrito[i].titulo;
+        let tdPrecio = document.createElement('td');
+        tdPrecio.textContent = articulosCarrito[i].precioNuevo + "€";
+        let tdCantidad = document.createElement('td');
+        tdCantidad.textContent = articulosCarrito[i].cantidad;
+        /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
+        let tdSumarArticulo = document.createElement('td');
+        let aSumar = document.createElement('a');
+        tdSumarArticulo.appendChild(aSumar);
+        aSumar.setAttribute('href', "#");
+        aSumar.classList.add('sumar-articulo');
+        aSumar.setAttribute('data-id', articulosCarrito[i].id);
+        aSumar.textContent = "+";
+        /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
+        /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
+        let tdRestarArticulo = document.createElement('td');
+        let aRestar = document.createElement('a');
+        tdRestarArticulo.appendChild(aRestar);
+        aRestar.setAttribute('href', "#");
+        aRestar.classList.add('restar-articulo');
+        aRestar.setAttribute('data-id', articulosCarrito[i].id);
+        aRestar.textContent = "-";
+        /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
+
+        tdImagen.appendChild(imgArticulo);
+        rowTbody.appendChild(tdImagen);
+        tBody.appendChild(rowTbody);
+        rowTbody.appendChild(tdTitulo);
+        rowTbody.appendChild(tdPrecio);
+        rowTbody.appendChild(tdCantidad);
+        rowTbody.appendChild(tdSumarArticulo);
+        rowTbody.appendChild(tdRestarArticulo);
+    }
+    console.log(articulosCarrito);
+};
+
+function limpiarDuplicados() {
+    tBody.innerHTML = "";
+};
+
+/* function actualizacionCarrito() {
+
+    articulosCarrito.forEach(function (articulo) {
+
+        let tBody = document.querySelector("#lista-carrito tbody");
+        let rowTbody = document.createElement('tr');
+        tBody.appendChild(rowTbody);
+
+        let tD = document.createElement('td');
+        let imgArticulo = document.createElement('img');
+        imgArticulo.setAttribute('src', articulo.imagen);
+        imgArticulo.setAttribute('width', "100");
+
+        tD.appendChild(imgArticulo);
+        rowTbody.appendChild(tD);
+
+        if (articulo == articulosCarrito.articulo) {
+
+        };
+        console.log(articulo.titulo);
+    })
+}; */
