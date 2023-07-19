@@ -1,42 +1,42 @@
 const arrayArticulos = [{
         id: 01,
+        cantidad: 1,
         titulo: "Elevate Pre-Workout",
         peso: "1Kg",
         imagen: "img/suplemento1.jpg",
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 49.99,
         precioNuevo: 34.99,
-        cantidad: 1
     },
     {
         id: 02,
+        cantidad: 1,
         titulo: "Complete Food Shake",
         peso: "1Kg",
         imagen: "img/suplemento2.jpg",
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 15,
         precioNuevo: 12.49,
-        cantidad: 1
     },
     {
         id: 03,
+        cantidad: 1,
         titulo: "Clear Whey Isolate",
         peso: "500Gr",
         imagen: "img/suplemento3.jpg",
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 30.99,
         precioNuevo: 29.44,
-        cantidad: 1
     },
     {
         id: 04,
+        cantidad: 1,
         titulo: "Clear Whey Isolate",
         peso: "500Gr",
         imagen: "img/suplemento3.jpg",
         imagenPuntuacion: "img/estrellas.png",
         precioAntiguo: 30.99,
         precioNuevo: 29.44,
-        cantidad: 1
     }
 ];
 
@@ -117,8 +117,7 @@ function bucleForEach() {
         span.classList.add('u-pull-right');
         span.textContent = `${objeto.precioNuevo}€`;
         pPrecio.appendChild(span);
-
-        let a = document.createElement('a');
+        let a = document.createElement('a'); // Boton "Agregar al carrito"
         /* --------------------------------------------------------------addEventListener----------------------------------------------------------*/
         a.addEventListener("click", () => {
             actualizacionCarrito(objeto);
@@ -132,113 +131,189 @@ function bucleForEach() {
         infoCard.appendChild(a);
 
     })
-    console.log(rowDiv);
+    //  console.log(rowDiv);
 };
 
-
 function actualizacionCarrito(objeto) {
+
     // Quitamos del Html el array obsoleto que se pinto anteriormente
     limpiarDuplicados();
-    articulosCarrito.push(objeto);
 
-    for (i = 0; i < articulosCarrito.length; i++) {
+    let existeEnCarrito = objeto.id;
+    console.log(existeEnCarrito, "Objeto que acabas de agregar");
 
-        let rowTbody = document.createElement('tr');
-        let tdImagen = document.createElement('td');
-        let imgArticulo = document.createElement('img');
-        imgArticulo.setAttribute('src', articulosCarrito[i].imagen);
-        imgArticulo.setAttribute('width', "100");
-        let tdTitulo = document.createElement('td');
-        tdTitulo.textContent = articulosCarrito[i].titulo;
-        let tdPrecio = document.createElement('td');
-        tdPrecio.textContent = articulosCarrito[i].precioNuevo + "€";
-        let tdCantidad = document.createElement('td');
-        tdCantidad.textContent = articulosCarrito[i].cantidad;
+    // Filtramos por Id si el objeto que estamos agregando ya existe en el carrito
+    let existingObject = articulosCarrito.find(obj => obj.id === existeEnCarrito);
+    console.log(existingObject, "Metodo .find");
 
+    // Si todavia no existe lo empujamos al carrito
+    if (!existingObject) {
 
-        /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
-        let tdSumarArticulo = document.createElement('td');
-        let aSumar = document.createElement('a');
+        articulosCarrito.push(objeto);
 
-        let idArrayArticulos = arrayArticulos[i].id;
+        for (i = 0; i < articulosCarrito.length; i++) {
 
-        let idArticulosCarrito = articulosCarrito[i].id;
+            let rowTbody = document.createElement('tr');
+            let tdImagen = document.createElement('td');
+            let imgArticulo = document.createElement('img');
+            imgArticulo.setAttribute('src', articulosCarrito[i].imagen);
+            imgArticulo.setAttribute('width', "100");
+            let tdTitulo = document.createElement('td');
+            tdTitulo.textContent = articulosCarrito[i].titulo;
+            let tdPrecio = document.createElement('td');
+            tdPrecio.textContent = articulosCarrito[i].precioNuevo + "€";
+            let tdCantidad = document.createElement('td');
+            tdCantidad.textContent = articulosCarrito[i].cantidad;
 
-        // let articuloCarritoCantidad = articulosCarrito[i].cantidad;
+            /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
+            let tdSumarArticulo = document.createElement('td');
+            let aSumar = document.createElement('a');
 
-        aSumar.addEventListener("click", () => {
+            let objetoIndice = objeto.cantidad;
 
-            if (idArrayArticulos == idArticulosCarrito) {
-
-                articulosCarrito.forEach(function (articulo, indice) {
-                    articulo.cantidad++;
-                    tdCantidad.textContent = articulo.cantidad;
-                })
-            }
-            console.log(articulosCarrito);
-            // console.log(articuloCarritoCantidad);
-        });
-
-        tdSumarArticulo.appendChild(aSumar);
-        aSumar.setAttribute('href', "#");
-        aSumar.classList.add('sumar-articulo');
-        aSumar.setAttribute('data-id', articulosCarrito[i].id);
-        aSumar.textContent = "+";
-        /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
-        /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
-        let tdRestarArticulo = document.createElement('td');
-        let aRestar = document.createElement('a');
-        tdRestarArticulo.appendChild(aRestar);
-        aRestar.setAttribute('href', "#");
-        aRestar.classList.add('restar-articulo');
-        aRestar.setAttribute('data-id', articulosCarrito[i].id);
-        aRestar.textContent = "-";
-        /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
-        let tdBorrarArticulo = document.createElement('td');
-        let aBorrar = document.createElement('a');
-        tdBorrarArticulo.appendChild(aBorrar);
-        aBorrar.setAttribute('href', "#");
-        aBorrar.classList.add('borrar-articulo');
-        aBorrar.setAttribute('data-id', articulosCarrito[i].id);
-        aBorrar.textContent = "X";
+            aSumar.addEventListener("click", () => {
+                objeto.cantidad++;
+                objetoIndice = objeto.cantidad;
+                tdCantidad.textContent = objetoIndice;
+                console.log(objetoIndice);
+                console.log(articulosCarrito);
+            });
 
 
-        tdImagen.appendChild(imgArticulo);
-        rowTbody.appendChild(tdImagen);
-        tBody.appendChild(rowTbody);
-        rowTbody.appendChild(tdTitulo);
-        rowTbody.appendChild(tdPrecio);
-        rowTbody.appendChild(tdCantidad);
-        rowTbody.appendChild(tdSumarArticulo);
-        rowTbody.appendChild(tdRestarArticulo);
-        rowTbody.appendChild(tdBorrarArticulo);
+            tdSumarArticulo.appendChild(aSumar);
+            aSumar.setAttribute('href', "#");
+            aSumar.classList.add('sumar-articulo');
+            aSumar.setAttribute('data-id', articulosCarrito[i].id);
+            aSumar.textContent = "+";
+
+            /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
+            /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
+            let tdRestarArticulo = document.createElement('td');
+            let aRestar = document.createElement('a');
+
+            aRestar.addEventListener("click", () => {
+                objeto.cantidad--;
+                objetoIndice = objeto.cantidad;
+                tdCantidad.textContent = objetoIndice;
+                console.log(objetoIndice);
+                console.log(articulosCarrito);
+            });
+
+            tdRestarArticulo.appendChild(aRestar);
+            aRestar.setAttribute('href', "#");
+            aRestar.classList.add('restar-articulo');
+            aRestar.setAttribute('data-id', articulosCarrito[i].id);
+            aRestar.textContent = "-";
+            /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
+            let tdBorrarArticulo = document.createElement('td');
+            let aBorrar = document.createElement('a');
+            tdBorrarArticulo.appendChild(aBorrar);
+            aBorrar.setAttribute('href', "#");
+            aBorrar.classList.add('borrar-articulo');
+            aBorrar.setAttribute('data-id', articulosCarrito[i].id);
+            aBorrar.textContent = "X";
+
+
+            tdImagen.appendChild(imgArticulo);
+            rowTbody.appendChild(tdImagen);
+            tBody.appendChild(rowTbody);
+            rowTbody.appendChild(tdTitulo);
+            rowTbody.appendChild(tdPrecio);
+            rowTbody.appendChild(tdCantidad);
+            rowTbody.appendChild(tdSumarArticulo);
+            rowTbody.appendChild(tdRestarArticulo);
+            rowTbody.appendChild(tdBorrarArticulo);
+        }
     }
-    console.log(articulosCarrito);
+    // Si ya existe simplemente le sumamos la cantidad y lanzamos el mismo bucle for
+    else {
+        console.log("Ya lo agregaste antes este articulo");
+        objeto.cantidad++;
+
+        for (i = 0; i < articulosCarrito.length; i++) {
+
+            let rowTbody = document.createElement('tr');
+            let tdImagen = document.createElement('td');
+            let imgArticulo = document.createElement('img');
+            imgArticulo.setAttribute('src', articulosCarrito[i].imagen);
+            imgArticulo.setAttribute('width', "100");
+            let tdTitulo = document.createElement('td');
+            tdTitulo.textContent = articulosCarrito[i].titulo;
+            let tdPrecio = document.createElement('td');
+            tdPrecio.textContent = articulosCarrito[i].precioNuevo + "€";
+            let tdCantidad = document.createElement('td');
+            tdCantidad.textContent = articulosCarrito[i].cantidad;
+
+            /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
+            let tdSumarArticulo = document.createElement('td');
+            let aSumar = document.createElement('a');
+
+            let objetoIndice = objeto.cantidad;
+
+            aSumar.addEventListener("click", () => {
+                objeto.cantidad++;
+                objetoIndice = objeto.cantidad;
+                tdCantidad.textContent = objetoIndice;
+                console.log(objetoIndice);
+                console.log(articulosCarrito);
+            });
+
+
+            tdSumarArticulo.appendChild(aSumar);
+            aSumar.setAttribute('href', "#");
+            aSumar.classList.add('sumar-articulo');
+            aSumar.setAttribute('data-id', articulosCarrito[i].id);
+            aSumar.textContent = "+";
+
+            /* --------------------------------------------------------------Sumar 1 Articulo----------------------------------------------------------*/
+            /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
+            let tdRestarArticulo = document.createElement('td');
+            let aRestar = document.createElement('a');
+
+            /* aRestar.addEventListener("click", () => {
+                objeto.cantidad--;
+                objetoIndice = objeto.cantidad;
+                tdCantidad.textContent = objetoIndice;
+                console.log(objetoIndice);
+                console.log(articulosCarrito);
+            }); */
+
+            tdRestarArticulo.appendChild(aRestar);
+            aRestar.setAttribute('href', "#");
+            aRestar.classList.add('restar-articulo');
+            aRestar.setAttribute('data-id', articulosCarrito[i].id);
+            aRestar.textContent = "-";
+            /* --------------------------------------------------------------Restar 1 Articulo---------------------------------------------------------*/
+            let tdBorrarArticulo = document.createElement('td');
+            let aBorrar = document.createElement('a');
+            tdBorrarArticulo.appendChild(aBorrar);
+            aBorrar.setAttribute('href', "#");
+            aBorrar.classList.add('borrar-articulo');
+            aBorrar.setAttribute('data-id', articulosCarrito[i].id);
+            aBorrar.textContent = "X";
+
+
+            tdImagen.appendChild(imgArticulo);
+            rowTbody.appendChild(tdImagen);
+            tBody.appendChild(rowTbody);
+            rowTbody.appendChild(tdTitulo);
+            rowTbody.appendChild(tdPrecio);
+            rowTbody.appendChild(tdCantidad);
+            rowTbody.appendChild(tdSumarArticulo);
+            rowTbody.appendChild(tdRestarArticulo);
+            rowTbody.appendChild(tdBorrarArticulo);
+        }
+    };
+    //  console.log(articulosCarrito);
+};
+
+function sumar(articulo) {
+    /* let objetoIndice = articulosCarrito[i];
+    console.log(objetoIndice); */
+    console.log(articulosCarrito[i].cantidad);
+    console.log(articulo, "Funcion sumar");
 };
 
 function limpiarDuplicados() {
     tBody.innerHTML = "";
 };
-
-/* function actualizacionCarrito() {
-
-    articulosCarrito.forEach(function (articulo) {
-
-        let tBody = document.querySelector("#lista-carrito tbody");
-        let rowTbody = document.createElement('tr');
-        tBody.appendChild(rowTbody);
-
-        let tD = document.createElement('td');
-        let imgArticulo = document.createElement('img');
-        imgArticulo.setAttribute('src', articulo.imagen);
-        imgArticulo.setAttribute('width', "100");
-
-        tD.appendChild(imgArticulo);
-        rowTbody.appendChild(tD);
-
-        if (articulo == articulosCarrito.articulo) {
-
-        };
-        console.log(articulo.titulo);
-    })
-}; */
